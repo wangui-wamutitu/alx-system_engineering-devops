@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ "$BREATH" =~ ^-?[0-9]+$ && "$LOVE" =~ ^-?[0-9]+$ ]]; then
+  echo $(($BREATH ** $LOVE))
+else
+  echo "Error: BREATH and LOVE must be integers" >&2
+  exit 1
+fi
