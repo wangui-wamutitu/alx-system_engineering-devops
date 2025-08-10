@@ -1,5 +1,9 @@
 # Distributed Web Infrastructure for www.foobar.com
+---
+## Diagram
+https://imgbox.com/N7wNZCOb
 
+---
 ## Overview
 This design uses **three servers** to host the website with better performance and fault tolerance compared to a single-server setup.
 
@@ -64,7 +68,3 @@ This design uses **three servers** to host the website with better performance a
 - **Security**: No firewall, no HTTPS.
 - **No Monitoring**: Failures or overload may go unnoticed.
 
----
-
-## Diagram
-![Task 1 Diagram](https://imgbox.com/N7wNZCOb)
