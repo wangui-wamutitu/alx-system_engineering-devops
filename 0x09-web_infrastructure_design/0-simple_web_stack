@@ -1,0 +1,46 @@
+# 0-simple_web_stack
+
+## Diagram link
+https://miro.com/app/board/uXjVJVA8ZiQ=/?share_link_id=95036450864
+
+---
+
+## User Request Flow
+
+1. A user types `www.foobar.com` into their browser.
+2. DNS resolves `www.foobar.com` to IP address `8.8.8.8` via a **CNAME** record.
+3. The user’s browser sends an HTTP request to `8.8.8.8`.
+4. The request reaches the server, where the **Nginx web server** listens on port 80.
+5. Nginx forwards the request to the **application server** (e.g., PHP running via FastCGI or another backend).
+6. The application reads/writes data from/to the **MySQL database**.
+7. The application returns the result to Nginx, which serves the response back to the user’s browser.
+
+---
+
+## Definitions and Roles
+
+- **Server**: A computer that provides services or resources to other computers (clients) over a network.
+
+- **Domain Name**: A human-readable address (like `foobar.com`) that maps to a server's IP address. It allows users to access the server without remembering IPs.
+
+- **DNS Record (www)**: The `www` in `www.foobar.com` is usually a **CNAME (Canonical Name)** record that points to `foobar.com` (which is an **A record** with IP `8.8.8.8`).
+
+- **Web Server (Nginx)**: Handles incoming HTTP requests. It serves static files and forwards dynamic requests to the application server.
+
+- **Application Server**: Executes the application’s business logic (e.g., rendering templates, processing forms, calling the database).
+
+- **Application Files**: Your actual website codebase — written in PHP, Python, Node.js, etc.
+
+- **Database (MySQL)**: Stores structured data used by the application — user info, posts, content, etc.
+
+- **Communication Protocol**: The browser and server communicate using the **HTTP protocol** (or HTTPS with SSL/TLS if configured).
+
+---
+
+## ⚠️ Limitations of This Setup
+
+- **Single Point of Failure (SPOF)**: If this one server goes down, the entire website becomes inaccessible.
+- **Downtime During Maintenance**: Updating code or restarting Nginx or MySQL will bring down the entire site temporarily.
+- **Poor Scalability**: One server cannot handle a large number of concurrent users or high traffic spikes.
+
+---
