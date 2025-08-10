@@ -1,70 +1,71 @@
 ## Task 2: Secured and Monitored Web Infrastructure
 
-### ![Task 2 Diagram](https://imgbox.com/U0hdM0dW)
+---
 
-### Description:
+## Description
 
-- **3 Web Servers**:
-  - Hosting the site and load-balanced for high availability.
-- **3 Firewalls**:
-  - Protect each layer: Load balancer, application server, and database.
-  - Restrict access (e.g., DB only allows traffic from app servers).
-- **1 Load Balancer with SSL Termination**:
-  - Terminates SSL to serve HTTPS traffic.
-  - SSL Certificate installed for encrypted traffic to `www.foobar.com`.
-- **1 MySQL Database Server**:
-  - Handles all data storage, but write-only capable (a risk).
-- **Monitoring Clients (e.g., SumoLogic, Prometheus)**:
-  - Installed on each server to collect metrics and logs.
-  - Tracks traffic, server performance, and anomalies.
+- **3 Web Servers**  
+  - Serve the website content and are load-balanced to ensure high availability.
+
+- **3 Firewalls**  
+  - One per critical layer (load balancer, application server, database).  
+  - Enforce strict access rules (e.g., database only accepts connections from application servers).
+
+- **1 Load Balancer with SSL Termination**  
+  - Distributes traffic across the web servers.  
+  - Handles SSL termination to provide HTTPS access.  
+  - SSL certificate installed for secure connections to `www.foobar.com`.
+
+- **1 MySQL Database Server**  
+  - Stores all persistent data.  
+  - Currently configured to accept writes only on a single node (introduces risk).
+
+- **Monitoring Clients (e.g., Sumo Logic, Prometheus)**  
+  - Installed on each server to collect metrics, logs, and performance data.  
+  - Monitor traffic patterns, system performance, and potential issues.
 
 ---
 
-## Additions
+## Purpose of Each Addition
 
-### Why Add Each Element?
-
-- **Firewalls**: Control inbound/outbound traffic; prevent unauthorized access.
-- **SSL Certificate**: Encrypts traffic (HTTPS); secures user data in transit.
-- **Monitoring Clients**: Real-time alerts and analysis of server health.
+- **Firewalls**: Restrict inbound and outbound network traffic, preventing unauthorized access.  
+- **SSL Certificate**: Encrypts user traffic via HTTPS, securing data in transit.  
+- **Monitoring Clients**: Provide real-time insights into server health and performance, enabling quick issue detection.
 
 ---
 
-## Monitoring
+## Monitoring Details
 
-- **Purpose**:
-  - Detect downtime or performance issues.
-  - Analyze trends and logs for system tuning.
-- **Collection Method**:
-  - Monitoring agents run as daemons, collecting CPU, memory, network, QPS, etc., and sending data to a monitoring server (e.g., SumoLogic).
-- **To Monitor QPS (Queries Per Second)**:
-  - Configure your monitoring agent to track SQL queries via:
-    - MySQL slow logs
-    - Performance Schema
-    - Application logs
+- **Goals**:  
+  - Identify downtime, slowdowns, and performance bottlenecks.  
+  - Gather data for capacity planning and optimization.
+
+- **Data Collection**:  
+  - Lightweight monitoring agents run on each server, collecting CPU, memory, network usage, request counts, and error rates.  
+  - Data is sent to a central monitoring platform (e.g., Sumo Logic, Prometheus, Grafana).
+
+- **Tracking QPS (Queries Per Second)**:  
+  - Enable MySQL Performance Schema.  
+  - Review slow query logs.  
+  - Monitor application logs for query counts.
+
+---
+
+## Potential Issues & Solutions
+
+### 1. SSL Termination at Load Balancer
+- **Issue**: Traffic between the load balancer and web servers is unencrypted.  
+- **Mitigation**: Use SSL passthrough or implement TLS between the load balancer and backend servers.
+
+### 2. Single Write-Capable MySQL Server
+- **Issue**: Creates a single point of failure and limits scalability.  
+- **Mitigation**: Use primary-primary replication or promote a read replica when the primary fails.
+
+### 3. All-in-One Server Roles
+- **Issue**: Running database, web server, and application server on the same machine limits scalability, isolates poorly, and complicates maintenance.  
+- **Mitigation**: Separate each role onto dedicated servers or use containerized services.
 
 ---
 
-## Infrastructure Issues
-
-### SSL Termination at Load Balancer
-- Problem:
-  - Traffic between the load balancer and web servers is unencrypted.
-- Fix:
-  - Enable end-to-end encryption (SSL passthrough or mutual TLS).
-
-### Single Write-Capable MySQL Server
-- Problem:
-  - Single point of failure; limits scalability.
-- Fix:
-  - Use master-master replication or promote a read replica when the master fails.
-
-### All-in-One Servers (App, DB, Web)
-- Problem:
-  - No separation of concerns.
-  - Harder to scale and manage.
-  - Poor fault isolation.
-- Fix:
-  - Use dedicated roles for each server (microservices or containerization).
-
----
+### Diagram
+![Task 2 Diagram](https://imgbox.com/U0hdM0dW)
