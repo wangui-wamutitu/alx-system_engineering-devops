@@ -1,0 +1,71 @@
+# Distributed Web Infrastructure for www.foobar.com
+
+## Overview
+This design uses **three servers** to host the website with better performance and fault tolerance compared to a single-server setup.
+
+## Components
+- **Server 1**: Load Balancer (HAProxy)
+- **Server 2**: Web Server (Nginx) + Application Server (Gunicorn/Django)
+- **Server 3**: Web Server (Nginx) + Application Server (Gunicorn/Django)
+- **Database Server**: MySQL (Primary-Replica setup optional)
+- **Domain**: `foobar.com` with a `www` CNAME or A record pointing to Load Balancer IP.
+
+---
+
+## Flow of a Request
+1. **User** requests `www.foobar.com`.
+2. **DNS** resolves to Load Balancer (Server 1).
+3. **HAProxy** distributes traffic between Server 2 and Server 3.
+4. **Nginx** handles static files and forwards dynamic requests to the Application Server.
+5. **Application Server** processes requests, interacts with the Database, and returns results to Nginx.
+6. **Nginx** sends the response back through the Load Balancer to the User.
+
+---
+
+## Why These Components
+
+### Load Balancer (HAProxy)
+- **Purpose**: Distribute incoming requests between multiple backend servers.
+- **Algorithm**: Round Robin (default) — cycles through servers evenly.
+- **Setup Type**: Active-Active — both backend servers handle traffic simultaneously.
+
+### Web Server (Nginx)
+- Serves static content directly.
+- Acts as reverse proxy for dynamic requests to the Application Server.
+
+### Application Server (Gunicorn/Django)
+- Runs application code.
+- Handles dynamic content generation and business logic.
+
+### Database (MySQL)
+- Stores persistent data.
+- **Primary-Replica**:
+  - **Primary**: Handles all writes and reads.
+  - **Replica**: Handles read-only queries, keeps in sync with Primary.
+
+---
+
+## Active-Active vs Active-Passive
+- **Active-Active**: All backend servers handle traffic at the same time (better utilization).
+- **Active-Passive**: One active server handles traffic, the other stays idle until failover.
+
+---
+
+## Communication
+- Browser ↔ Load Balancer: HTTP/HTTPS
+- Load Balancer ↔ Web Server: HTTP
+- Web Server ↔ App Server: Local socket/HTTP
+- App Server ↔ Database: SQL over TCP
+
+---
+
+## Issues with This Infrastructure
+- **Single Point of Failure (SPOF)**: Load balancer, database primary.
+- **Security**: No firewall, no HTTPS.
+- **No Monitoring**: Failures or overload may go unnoticed.
+
+---
+
+## Diagram
+
+https://imgbox.com/N7wNZCOb
