@@ -1,4 +1,8 @@
 ## Task 2: Secured and Monitored Web Infrastructure
+---
+
+### Diagram
+https://imgbox.com/U0hdM0dW
 
 ---
 
@@ -64,8 +68,3 @@
 ### 3. All-in-One Server Roles
 - **Issue**: Running database, web server, and application server on the same machine limits scalability, isolates poorly, and complicates maintenance.  
 - **Mitigation**: Separate each role onto dedicated servers or use containerized services.
-
----
-
-### Diagram
-![Task 2 Diagram](https://imgbox.com/U0hdM0dW)
