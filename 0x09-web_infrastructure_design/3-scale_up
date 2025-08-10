@@ -1,4 +1,7 @@
 # Scale Up Infrastructure Design
+---
+## Diagram
+https://imgbox.com/oMVZuSBp
 
 ## Overview
 This setup scales the previous 3-server infrastructure into a **4-server high-availability architecture** by:
@@ -73,9 +76,3 @@ This setup scales the previous 3-server infrastructure into a **4-server high-av
 - **Separate Web Server**: Better performance for static content.
 - **Separate Application Server**: Dedicated processing power for backend logic.
 - **Separate Database Server**: Optimized for data storage and queries.
-
----
-
-## Diagram
-
-![Task 3 Diagram](https://imgbox.com/oMVZuSBp)
